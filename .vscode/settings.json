@@ -1,0 +1,55 @@
+{
+	"cSpell.words": [
+		"cnpm",
+		"Codacy",
+		"consola",
+		"esbuild",
+		"execa",
+		"filesize",
+		"iife",
+		"lcid",
+		"npmjs",
+		"npmrc",
+		"onwarn",
+		"parseargs",
+		"pkgjs",
+		"pkgs",
+		"pluginutils",
+		"pnpm",
+		"positionals",
+		"reinstaller",
+		"saqqdy",
+		"tscjs",
+		"tsdoc",
+		"tsnd",
+		"typeof",
+		"unpub",
+		"unpublish",
+		"vitepress",
+		"whatpm",
+		"whichpm"
+	],
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"npm.packageManager": "yarn",
+	"eslint.probe": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"html",
+		"vue",
+		"markdown"
+	],
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"html",
+		"vue",
+		"markdown"
+	]
+}

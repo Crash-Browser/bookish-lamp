@@ -1,0 +1,91 @@
+name: npm-publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish-gpr:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.12
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmmirror.com
+          cache: pnpm
+
+      - run: echo ${{ matrix.node-version }}
+      - run: npm -v
+      - run: pnpm store path
+      - run: pnpm install
+
+      # - run: npx changelogithub --no-group
+      #   continue-on-error: true
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - run: pnpm dist
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+
+      - name: Gen .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ./.npmrc
+
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/utils/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/extra/fs/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/extra/path/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/extra/cp/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/lerna-workspace-info/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/lerna-workspace-root/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/pnpm-workspace-info/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/pnpm-workspace-root/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/yarn-workspace-info/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/yarn-workspace-root/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/workspace-info/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/workspace-root/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/monorepo-root/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/workspace-projects/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/workspace-pkgs/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/pm-info/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/os-lang/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/which-pm/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./packages/what-pm/.npmrc
+
+      - run: pnpm pub
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/monorepo/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/utils/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/extra.fs/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/extra.path/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/extra.cp/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/lerna-workspace-info/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/lerna-workspace-root/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/pnpm-workspace-info/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/pnpm-workspace-root/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/yarn-workspace-info/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/yarn-workspace-root/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/workspace-info/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/workspace-root/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/monorepo-root/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/workspace-projects/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/workspace-pkgs/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/pm-info/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/@node-kit/which-pm/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/what-pm/sync"
+      - run: curl -X PUT -d "sync_upstream=true" "https://registry-direct.npmmirror.com/os-lang/sync"

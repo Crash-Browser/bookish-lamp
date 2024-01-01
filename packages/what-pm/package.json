@@ -1,0 +1,63 @@
+{
+	"name": "what-pm",
+	"description": "Detects what package manager was used for installation",
+	"version": "3.2.0",
+	"bin": {
+		"what-pm": "./bin/index.mjs",
+		"whatpm": "./bin/index.mjs"
+	},
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.esm-bundler.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"module": "./dist/index.esm-bundler.js",
+			"require": "./dist/index.cjs.js",
+			"import": "./dist/index.mjs"
+		},
+		"./*": "./*"
+	},
+	"directories": {
+		"bin": "bin",
+		"dist": "dist",
+		"src": "src"
+	},
+	"files": [
+		"bin",
+		"dist",
+		"typings"
+	],
+	"dependencies": {
+		"@pkgjs/parseargs": "^0.11.0",
+		"find-up": "^5.0.0",
+		"pm-info": "workspace:*",
+		"workspace-root": "workspace:*"
+	},
+	"devDependencies": {
+		"@microsoft/api-extractor": "^7.36.4",
+		"@types/pkgjs__parseargs": "^0.10.0"
+	},
+	"sideEffects": false,
+	"keywords": [
+		"node-kit",
+		"packageManager",
+		"which-pm",
+		"what-pm"
+	],
+	"license": "MIT",
+	"author": "saqqdy <https://github.com/saqqdy>",
+	"homepage": "https://github.com/saqqdy/node-kit/tree/master/packages/what-pm#readme",
+	"bugs": {
+		"url": "https://github.com/saqqdy/node-kit/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/saqqdy/node-kit.git",
+		"directory": "packages/what-pm"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org",
+		"access": "public"
+	}
+}
